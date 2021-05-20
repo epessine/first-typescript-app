@@ -16,7 +16,7 @@ app.get('/bmi', (req, res) => {
     res.send(result);
   } catch (e) {
     const result = {
-      error: e.message
+      error: 'malformatted parameters'
     };
     res.send(result);
   }
