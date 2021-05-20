@@ -47,7 +47,7 @@ const calculateExercises = (days: Array<number>, originalTarget: number): Result
   } else if (percentCompleted > 0.3 && percentCompleted <= 0.6) {
     rating = 2;
     ratingDescription = 'not too bad but could be better';
-  } else if (percentCompleted > 0.6) {
+  } else {
     rating = 1;
     ratingDescription = 'very good! keep going!';
   }

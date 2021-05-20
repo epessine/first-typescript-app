@@ -33,7 +33,7 @@ const calculateBmi = (height: number, weight: number): string => {
     return `Your BMI category is 'Moderately obese' (${bmi})`;
   } else if (bmi > 35 && bmi <= 40) {
     return `Your BMI category is 'Severely obese' (${bmi})`;
-  } else if (bmi > 40) {
+  } else {
     return `Your BMI category is 'Very severely obese' (${bmi})`;
   }
 };
