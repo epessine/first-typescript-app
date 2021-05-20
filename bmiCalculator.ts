@@ -3,14 +3,17 @@ interface BmiInput {
   weight: number;
 }
 
-const parseBmiArguments = (args: Array<string>): BmiInput => {
-  if (args.length < 4) throw new Error('Not enough arguments');
-  if (args.length > 4) throw new Error('Too many arguments');
+interface Output {
+  weight: number,
+  height: number,
+  bmi: string
+}
 
-  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+const parseBmiArguments = (args: Array<string>): BmiInput => {
+  if (!isNaN(Number(args[0])) && !isNaN(Number(args[1]))) {
     return {
-      height: Number(args[2]),
-      weight: Number(args[3])
+      height: Number(args[0]),
+      weight: Number(args[1])
     };
   } else {
     throw new Error('Provided values were not numbers!');
@@ -38,9 +41,15 @@ const calculateBmi = (height: number, weight: number): string => {
   }
 };
 
-try {
-  const { height, weight } = parseBmiArguments(process.argv);
-  console.log(calculateBmi(height, weight));
-} catch (e) {
-  console.log('Error, something bad happened: ', e.message);
-}
+export const bmi = (args: Array<string>): Output => {
+  try {
+    const { height, weight } = parseBmiArguments(args);
+    return {
+      weight,
+      height,
+      bmi: calculateBmi(height, weight)
+    };
+  } catch (e) {
+    throw new Error('malformatted parameters');
+  }
+};
