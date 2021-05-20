@@ -66,6 +66,7 @@ const calculateExercises = (days: Array<number>, originalTarget: number): Result
 try {
   const { days, target } = parseExerciseArguments(process.argv);
   console.log(calculateExercises(days, target));
-} catch (e) {
-  console.log('Error, something bad happened: ', e.message);
+} catch (e: unknown) {
+  if (e instanceof Error)
+    console.log('Error, something bad happened: ', e.message);
 }
