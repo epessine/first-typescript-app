@@ -1,8 +1,3 @@
-interface ExerciseInput {
-  days: Array<number>,
-  target: number
-}
-
 interface Result {
   periodLength: number,
   trainingDays: number,
@@ -13,20 +8,35 @@ interface Result {
   average: number
 }
 
-const parseExerciseArguments = (args: Array<string>): ExerciseInput => {
-  if (args.length < 4) throw new Error('Not enough arguments');
+interface Output {
+  periodLength: number,
+  trainingDays: number,
+  success: boolean,
+  rating: number,
+  ratingDescription: string,
+  target: number,
+  average: number
+}
 
-  args.slice(2).forEach(arg => {
-    if (isNaN(Number(arg)))
-      throw new Error('Provided values were not numbers!');
+interface Args {
+  daily_exercises: Array<number>,
+  target: number
+}
+
+const parseExercisesArguments = (args: Args) => {
+  const { daily_exercises, target } = args;
+  const parsed_daily = daily_exercises.map(n => {
+    if (isNaN(Number(n))) {
+      throw new Error('malformatted parameters');
+    }
+    return Number(n);
   });
-  
-  const days = args.map(arg => Number(arg)).slice(2, -1);
-  const target = Number(args[args.length - 1]);
-
+  if (isNaN(Number(target)))
+    throw new Error('malformatted parameters');
+  const parsed_target = Number(target);
   return {
-    days,
-    target
+    daily_exercises: parsed_daily,
+    target: parsed_target
   };
 };
 
@@ -63,10 +73,11 @@ const calculateExercises = (days: Array<number>, originalTarget: number): Result
   };
 };
 
-try {
-  const { days, target } = parseExerciseArguments(process.argv);
-  console.log(calculateExercises(days, target));
-} catch (e: unknown) {
-  if (e instanceof Error)
-    console.log('Error, something bad happened: ', e.message);
-}
+export const exercises = (args: Args): Output => {
+  try {
+    const { daily_exercises, target } = parseExercisesArguments(args);
+    return calculateExercises(daily_exercises, target);
+  } catch (e) {
+    throw new Error('malformatted parameters');
+  }
+};
